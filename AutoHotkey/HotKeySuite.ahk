@@ -76,6 +76,7 @@ Menu Case, Add, &Reverse, CCase
 
 AppsKey::
 ;Keep AppsKey working (mostly) normally.
+SoundBeep
 Send {AppsKey}
 Return
 
@@ -192,6 +193,18 @@ SendMessage, 0x112, 0xF170, 1,, Program Manager
 Return
 
 AppsKey & e::Edit
+
+AppsKey & f::Toggle_F := !Toggle_F
+
+SetTimer Loop_F, 100
+
+Loop_F:
+    If (!Toggle_F)
+        Return
+    goto, Loop_F
+    Send {LControl}
+return
+
 
 AppsKey & h::
 If GetKeyState("shift")
