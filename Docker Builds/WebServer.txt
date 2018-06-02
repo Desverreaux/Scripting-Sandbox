@@ -1,0 +1,51 @@
+FROM ubuntu:xenial
+MAINTAINER John Desverreaux version: 0.1
+
+RUN apt-get update
+RUN apt-get install apache2 --yes
+RUN apt-get install npm --yes   
+RUN apt-get install composer --yes
+RUN apt-get install wget --yes
+RUN apt-get install apt-utils --yes
+RUN apt-get install autoconf curl git subversion make unzip wget --yes
+
+
+RUN echo "Acquire::GzipIndexes \"false\"; Acquire::CompressionTypes::Order:: \"gz\";" >/etc/apt/apt.conf.d/docker-gzip-indexes
+
+#install mySQL 
+    RUN apt-cache search libaio 
+    RUN apt-get install libaio-dev --yes
+
+
+
+#install php modules 
+    RUN apt-get install php-gd --yes 
+
+
+#installs webmin 
+    RUN rm /etc/apt/apt.conf.d/docker-gzip-indexes
+    RUN rm /var/lib/apt/lists/*lz4
+    RUN apt-get -o Acquire::GzipIndexes=false update
+    RUN apt-get install apt-show-versions --yes
+    RUN echo -e "\ndeb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
+    RUN wget http://www.webmin.com/jcameron-key.asc  
+    RUN apt-get install apt-show-versions --yes
+    RUN apt-get update && apt-get dist-upgrade -y  #installs webmin
+
+#installs laravel
+    RUN rm -R /var/www/html
+    RUN cd /var/www
+
+
+#ENV APACHE_RUN_USER www-data
+#ENV APACHE_RUN_GROUP www-data
+#ENV APACHE_LOG_DIR /var/log/apache2
+#ENV LC_ALL en_US.UTF-8
+
+
+EXPOSE 80
+EXPOSE 10000
+
+CMD /usr/bin/touch /var/webmin/miniserv.log && /usr/sbin/service webmin restart && /usr/bin/tail -f /var/webmin/miniserv.log
+
+CMD ["/usr/sbin/apache2", "-D", "FOREGROUND"] 
