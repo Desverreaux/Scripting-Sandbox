@@ -60,9 +60,10 @@ RUN apt-get install autoconf curl git subversion make unzip wget dialog --yes
     RUN php composer-setup.php
     RUN php -r "unlink('composer-setup.php');"
 
-
+    cp ./composer.phar / 
 
     RUN composer install
+    RUN composer update
 
 
 #ENV APACHE_RUN_USER www-data
@@ -75,5 +76,9 @@ EXPOSE 80
 EXPOSE 10000
 
 CMD /usr/bin/touch /var/webmin/miniserv.log && /usr/sbin/service webmin restart && /usr/bin/tail -f /var/webmin/miniserv.log
+#/usr/share/webmin/changepass.pl /etc/webmin admin password
+#comment out apache2.conf line 63 for reasons idk
+#RUN chmod 755 -R /var/www/Desverreaux.com
+#RUN chown -R www-data /var/www/Desverreaux.com
 
 CMD ["service", "apache2", "start"] 
