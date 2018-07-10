@@ -1,0 +1,18 @@
+version: '2'
+
+services:
+  DevOps:
+    hostname: 'devops'
+    image: desverreaux/webserver:devops
+    expose:
+      - "80"
+      - "443"
+    volumes:
+      - D:/Serverdata/Desverreaux.com/DevOps:/var/www/DevOps/
+    restart: always
+
+    network_mode: "bridge"
+    networks: 
+      -ProxyTargetNetwork
+    command: tail -f /etc/hosts
+    container_name: DevOps

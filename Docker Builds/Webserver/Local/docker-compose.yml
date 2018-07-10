@@ -4,12 +4,16 @@ services:
   Webserver:
     hostname: 'webserver'
     image: desverreaux/webserver:latest
-    ports:
-      - "80:80"
-      - "10000:10000"
+    expose:
+      - "80"
+      - "10000"
     volumes:
       - D:/Serverdata/Desverreaux.com/Filesystem:/var/www/Desverreaux.com/
     restart: always
+
+    network_mode: "bridge"
+    networks: 
+      -ProxyTargetNetwork
   
-    command: tail -f /etc/hosts
+    command: tail -f /etc/null
     container_name: Webserver

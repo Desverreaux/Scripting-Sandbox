@@ -2,14 +2,18 @@ version: '2'
 
 services:
   Webserver:
-    hostname: 'webserver-hostname'
+    hostname: 'webserver'
     image: desverreaux/webserver:latest
-    ports:
-      - "80:80"
-      - "10000:10000"
+    expose:
+      - "80"
+      - "10000"
     volumes:
       - /data/Webserver/:/var/www/Desverreaux.com/
     restart: always
-  
-    command: tail -f /etc/hosts
+
+   network_mode: "bridge"
+    networks: 
+      -ProxyTargetNetwork
+      
+    command: tail -f /etc/null
     container_name: Webserver
