@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  DevOps:
+    hostname: 'devops'
+    image: desverreaux/webserver:devops
+    ports:
+      - "7000:80"
+      - "7443:443"
+    volumes:
+      - D:/Serverdata/Desverreaux.com/DevOps:/var/www/DevOps/
+    restart: always
+  
+    command: tail -f /etc/hosts
+    container_name: DevOps

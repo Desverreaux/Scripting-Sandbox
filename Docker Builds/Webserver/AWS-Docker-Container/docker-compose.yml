@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  Webserver:
+    hostname: 'webserver-hostname'
+    image: desverreaux/webserver:latest
+    ports:
+      - "80:80"
+      - "10000:10000"
+    volumes:
+      - /data/Webserver/:/var/www/Desverreaux.com/
+    restart: always
+  
+    command: tail -f /etc/hosts
+    container_name: Webserver
