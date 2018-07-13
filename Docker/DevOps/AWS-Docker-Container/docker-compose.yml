@@ -8,11 +8,18 @@ services:
       - "80"
       - "443"
     volumes:
-      - D:/Serverdata/Desverreaux.com/DevOps:/var/www/DevOps/
+      - data:/var/www/DevOps/
     restart: always
 
-    network_mode: "bridge"
     networks: 
       -ProxyTargetNetwork
+
     command: tail -f /etc/hosts
+
     container_name: DevOps
+
+volume:
+  data_DevOps:
+    external: true
+      name: devops
+  
