@@ -16,7 +16,7 @@ services:
     #   MYSQL_ROOT_PASSWORD: 9rriyx
 
     environment: 
-      ADMINER_DESIGN='pepa-linha'
+      - ADMINER_DESIGN='pepa-linha'
 
     links:
       # for mysql container
