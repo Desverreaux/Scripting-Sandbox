@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 
 services:
   DevOps:
@@ -13,7 +13,7 @@ services:
     networks:
      - ReverseProxy 
 
-    command: tail -f /etc/null
+    command: tail -f /etc/hosts
 
     container_name: DevOps
 
