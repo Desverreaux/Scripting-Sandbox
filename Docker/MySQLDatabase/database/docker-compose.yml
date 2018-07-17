@@ -1,0 +1,33 @@
+version: '2'
+
+services:
+  MySQL:
+    hostname: 'mysql'
+    image: mysql:5.7    
+    expose:
+      - "3306"
+    volumes:
+      - data_MySQL:/var/lib/mysql
+    networks: 
+      - ReverseProxy
+
+    environment:
+      MYSQL_ROOT_PASSWORD: 9rriyx
+      MYSQL_DATABASE: base
+      MYSQL_USER: phpmyadmin
+      MYSQL_PASSWORD: ne4cbm
+
+    container_name: MySQL
+
+    restart: always
+    
+volumes:
+  data_MySQL:
+    external: 
+      name: mysql
+
+        
+networks: 
+  ReverseProxy:
+    external:
+      name: ProxyTargetNetwork
