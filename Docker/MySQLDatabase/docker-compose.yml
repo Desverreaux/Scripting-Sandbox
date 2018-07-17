@@ -1,47 +1,47 @@
-version: '3'
+version: '2'
 
 services:
   MySQL:
     hostname: 'mysql'
     image: mysql:5.7    
     expose:
-      "3306"
+      - "3306"
     volumes:
       - data_MySQL:/var/lib/mysql
     networks: 
-      -ReverseProxy
+      - ReverseProxy
 
     environment:
-      MYSQL_ROOT_PASSWORD: d79KvYFGPSde7tHW
+      MYSQL_ROOT_PASSWORD: 9rriyx
       MYSQL_DATABASE: base
       MYSQL_USER: phpmyadmin
-      MYSQL_PASSWORD: yibzsyefdgsigrjw
+      MYSQL_PASSWORD: ne4cbm
 
     container_name: MySQL
 
     restart: always
 
-phpmyadmin:
-  image: phpmyadmin/phpmyadmin
-     
-  expose:
-    - "80"
+  Adminer:
+    image: adminer
+      
+    expose:
+      - "8080"
 
-  networks: 
-    -ProxyTargetNetwork
-  environment:
-    PMA_ARBITRARY: 1
-    MYSQL_USER: phpmyadmin
-    MYSQL_PASSWORD: yibzsyefdgsigrjw
-    MYSQL_ROOT_PASSWORD: d79KvYFGPSde7tHW
-  links:
-    # for mysql container
-    - "MySQL:MySQL"
+    networks: 
+      - ReverseProxy
+    # environment:
+    #   PMA_ARBITRARY: 1
+    #   MYSQL_USER: phpmyadmin
+    #   MYSQL_PASSWORD: ne4cbm
+    #   MYSQL_ROOT_PASSWORD: 9rriyx
+    links:
+      # for mysql container
+      - "MySQL:MySQL"
 
 volumes:
-    data_MySQL:
-      external: 
-        name: mysql
+  data_MySQL:
+    external: 
+      name: mysql
 
         
 networks: 
