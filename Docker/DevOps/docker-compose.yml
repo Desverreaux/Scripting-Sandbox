@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  DevOps:
+    hostname: 'devops'
+    image: desverreaux/webserver:devops
+    expose:
+      - "80"
+      - "443"
+    volumes:
+      - data_DevOps:/var/www/DevOps/
+
+    networks:
+     - ReverseProxy 
+
+    command: tail -f /etc/null
+
+    container_name: DevOps
+
+    restart: always
+
+volumes:
+  data_DevOps:
+    external:
+      name: devops
+
+networks: 
+  ReverseProxy:
+    external:
+      name: ProxyTargetNetwork

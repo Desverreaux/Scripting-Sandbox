@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  temp:
+    hostname: 'temp'
+    image: desverreaux/webserver:devops
+    ports:
+      - "9998:80"
+      - "9999:443"
+    command: tail -f /etc/hosts
+
+    restart: always

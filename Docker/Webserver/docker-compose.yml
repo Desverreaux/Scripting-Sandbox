@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  Webserver:
+    hostname: 'webserver'
+    image: desverreaux/webserver:latest
+    expose:
+      - "80"
+      - "443"
+      - "10000"
+    volumes:
+      - data_webserver:/var/www/Desverreaux.com/
+    
+    networks: 
+     - ReverseProxy
+
+    command: tail -f /etc/null
+
+    container_name: Webserver
+
+    restart: always
+
+volumes:
+  data_webserver:
+    external:
+      name: webserver
+
+networks:
+  ReverseProxy:
+    external:
+      name: ProxyTargetNetwork
+      
