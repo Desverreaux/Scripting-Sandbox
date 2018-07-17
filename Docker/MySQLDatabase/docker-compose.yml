@@ -29,11 +29,8 @@ services:
 
     networks: 
       - ReverseProxy
-    # environment:
-    #   PMA_ARBITRARY: 1
-    #   MYSQL_USER: phpmyadmin
-    #   MYSQL_PASSWORD: ne4cbm
-    #   MYSQL_ROOT_PASSWORD: 9rriyx
+    environment:
+        - ADMINER_DESIGN='nette'
     links:
       # for mysql container
       - "MySQL:MySQL"
