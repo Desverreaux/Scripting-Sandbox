@@ -9,8 +9,8 @@ services:
     volumes:
       - data_MySQL:/var/lib/mysql
     networks: 
-      - ReverseProxy:
-          ipv4_address: 172.0.10.0
+      ReverseProxy:
+        ipv4_address: 172.0.0.10
 
     environment:
       MYSQL_ROOT_PASSWORD: 9rriyx
@@ -29,12 +29,15 @@ services:
       - "8080"
 
     networks: 
-      - ReverseProxy:
-          ipv4_address: 172.0.10.1
+      ReverseProxy:
+        ipv4_address: 172.0.0.11
 
     environment:
         - ADMINER_DESIGN=pepa-linha
         - ADMINER_DEFAULT_SERVER=MySQL
+        - ADMINER_PLUGINS:dump-xml dump-json dump-php dump-date edit-calendar edit-foreign edit-textarea email-table enum-option frames json-column slugify 
+
+
     links:
       # for mysql container
       - "MySQL:MySQL"
