@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+  Adminer:
+    image: adminer
+      
+    expose:
+      - "8080"
+
+    networks: 
+      - ReverseProxy
+    environment:
+        - ADMINER_DESIGN=pepa-linha
+        - ADMINER_DEFAULT_SERVER=MySQL
+
+    container_name: Adminer
+
+networks: 
+  ReverseProxy:
+    external:
+      name: ProxyTargetNetwork

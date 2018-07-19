@@ -1,0 +1,4 @@
+webserver :docker run -d -p 80:80 -p 443:443 -p 10000:10000        --name Webserver  -v D:/ServerData/Desverreaux.com/FileSystem:/var/www/desverreaux.com  desverreaux/webserver tail -f /etc/hosts 
+adminer   :docker run -d -p 8080:8080 -e ADMINER_DESIGN=pepa-linha --name Adminer    -v D:/ServerData/Desverreaux.com/FileSystem:/var/www/html             desverreaux/adminer   tail -f /etc/hosts 
+MySQL     :docker run -d -p 3306:3306                              --name MySQL                                                                            desverreaux/mysql     tail -f /etc/hosts 
+devops    :docker run -d -p 81:80 -p 444:443                       --name DevOps     -v D:/ServerData/Desverreaux.com/DevOps:/var/www/devops               desverreaux/devops    tail -f /etc/hosts 

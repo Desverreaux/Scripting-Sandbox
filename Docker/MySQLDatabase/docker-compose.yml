@@ -9,7 +9,8 @@ services:
     volumes:
       - data_MySQL:/var/lib/mysql
     networks: 
-      - ReverseProxy
+      - ReverseProxy:
+          ipv4_address: 172.0.10.0
 
     environment:
       MYSQL_ROOT_PASSWORD: 9rriyx
@@ -28,12 +29,17 @@ services:
       - "8080"
 
     networks: 
-      - ReverseProxy
+      - ReverseProxy:
+          ipv4_address: 172.0.10.1
+
     environment:
-        - ADMINER_DESIGN='nette'
+        - ADMINER_DESIGN=pepa-linha
+        - ADMINER_DEFAULT_SERVER=MySQL
     links:
       # for mysql container
       - "MySQL:MySQL"
+
+    container_name: Adminer
 
 volumes:
   data_MySQL:
