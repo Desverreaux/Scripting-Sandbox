@@ -22,27 +22,52 @@ services:
 
     restart: always
 
-  Adminer:
-    image: adminer
-      
+  phpmyadmin:
+    hostname: 'phpmyadmin'
+    image: phpmyadmin/phpmyadmin
     expose:
       - "8080"
-
-    networks: 
+    networks:
       ReverseProxy:
         ipv4_address: 172.0.0.11
 
-    environment:
-        - ADMINER_DESIGN=pepa-linha
-        - ADMINER_DEFAULT_SERVER=MySQL
-        - ADMINER_PLUGINS:dump-xml dump-json dump-php dump-date edit-calendar edit-foreign edit-textarea email-table enum-option frames json-column slugify 
+    environment: 
+      PMA_ARBITRARY: 1
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: admin
+      PMA_PASSWORD: ne4cbm
+      PMA_ABSOLUTE_URI: data.desverreaux.com
+      MYSQL_USER: phpmyadmin
+      MYSQL_PASSWORD: ne4cbm
+      MYSQL_ROOT_PASSWORD: 9rriyx
+
+    links: 
+      - MySQL:MySQL
+
+    container_name: phpmyadmin
+
+  # Adminer:
+  #   image: adminer
+      
+  #   expose:
+  #     - "8080"
+
+  #   networks: 
+  #     ReverseProxy:
+  #       ipv4_address: 172.0.0.11
+
+  #   environment:
+  #       - ADMINER_DESIGN=pepa-linha
+  #       - ADMINER_DEFAULT_SERVER=MySQL
+  #       - ADMINER_PLUGINS:dump-xml dump-json dump-php dump-date edit-calendar edit-foreign edit-textarea email-table enum-option frames json-column slugify 
 
 
-    links:
-      # for mysql container
-      - "MySQL:MySQL"
+  #   links:
+  #     # for mysql container
+  #     - "MySQL:MySQL"
 
-    container_name: Adminer
+  #   container_name: Adminer
 
 volumes:
   data_MySQL:
