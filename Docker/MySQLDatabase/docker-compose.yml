@@ -6,8 +6,8 @@ services:
     image: mysql:5.7    
     expose:
       - "3306"
-    volumes:
-      - data_MySQL:/var/lib/mysql
+#    volumes:
+#      - data_MySQL:/var/lib/mysql
     networks: 
       ReverseProxy:
         ipv4_address: 172.0.0.10
@@ -26,26 +26,19 @@ services:
     hostname: 'phpmyadmin'
     image: phpmyadmin/phpmyadmin
     expose:
-      - "8080"
+      - "80"
     networks:
       ReverseProxy:
         ipv4_address: 172.0.0.11
 
     environment: 
       PMA_ARBITRARY: 1
-      PMA_HOST: mysql
-      PMA_PORT: 3306
-      PMA_USER: admin
-      PMA_PASSWORD: ne4cbm
-      PMA_ABSOLUTE_URI: data.desverreaux.com
-      MYSQL_USER: phpmyadmin
-      MYSQL_PASSWORD: ne4cbm
       MYSQL_ROOT_PASSWORD: 9rriyx
 
     links: 
       - MySQL:MySQL
 
-    container_name: phpmyadmin
+    container_name: PhpMyAdmin
 
   # Adminer:
   #   image: adminer
@@ -69,10 +62,10 @@ services:
 
   #   container_name: Adminer
 
-volumes:
-  data_MySQL:
-    external: 
-      name: mysql
+#volumes:
+#  data_MySQL:
+#    external: 
+#      name: mysql
 
         
 networks: 
