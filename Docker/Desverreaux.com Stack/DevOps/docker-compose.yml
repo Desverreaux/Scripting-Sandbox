@@ -6,10 +6,8 @@ services:
     image: desverreaux/webserver:devops
     expose:
       - "80"
-      - "443"
-      - "8000"
     volumes:
-      - data_DevOps:/var/www/DevOps/
+      - D:\ServerData\Desverreaux.com\DevOps:/var/www/DevOps/
 
     networks:
       ReverseProxy:
@@ -21,10 +19,10 @@ services:
 
     restart: always
 
-volumes:
-  data_DevOps:
-    external:
-      name: devops
+# volumes:
+#   data_DevOps:
+#     external:
+#       name: devops
 
 networks: 
   ReverseProxy:

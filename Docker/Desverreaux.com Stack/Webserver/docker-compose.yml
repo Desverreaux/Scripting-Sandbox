@@ -1,0 +1,85 @@
+version: '3'
+
+services:
+  Apache:
+    hostname: 'Apache'
+    image: ???????
+    expose:
+      - "80"
+      - "443"
+      - "10000"
+    volumes:
+      - ApacheServer:/storage
+      - Desverreaux.com:/var/www/Desverreaux.com/
+    networks: 
+      - ReverseProxy
+
+    command: tail -f /etc/hosts
+
+    container_name: Apache Server
+
+    restart: always
+  
+  Portainer:
+    hostname: 'Portainer'
+    image: portainer/portainer
+    expose:
+      - "9000"
+    command: -H unix:///var/run/docker.sock
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - data_portainer:/data
+
+  MySQL:
+    hostname: 'mysql'
+    image: mysql:5.7    
+    expose:
+      - "3306"
+#    volumes:
+#      - data_MySQL:/var/lib/mysql
+    networks: 
+      ReverseProxy:
+        ipv4_address: 172.0.0.10
+
+    environment:
+      MYSQL_ROOT_PASSWORD: 9rriyx
+      MYSQL_DATABASE: base
+      MYSQL_USER: phpmyadmin
+      MYSQL_PASSWORD: ne4cbm
+
+    container_name: MySQL
+
+    restart: always
+
+  phpmyadmin:
+    hostname: 'phpmyadmin'
+    image: phpmyadmin/phpmyadmin
+    expose:
+      - "80"
+    networks:
+      ReverseProxy:
+        ipv4_address: 172.0.0.11
+
+    environment: 
+      PMA_ARBITRARY: 1
+      MYSQL_ROOT_PASSWORD: 9rriyx
+
+    links: 
+      - MySQL:MySQL
+
+    container_name: PhpMyAdmin
+
+
+volumes:
+  data_webserver:
+    external:
+      name: webserver_data
+  data_portainer:
+    external:
+      name: portainer_data
+
+networks:
+  InternalProxy:
+    external:
+      name: ProxyTargetNetwork
+      
