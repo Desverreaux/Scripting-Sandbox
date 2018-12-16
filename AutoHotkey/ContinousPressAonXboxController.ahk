@@ -7,12 +7,10 @@ CapsLock::
 loop , 200 {
 
 sleep 20
+Send {Joy1}
 
 }
 
-KeyHistory
-
-/*
 
 SoundBeep
 Loop
@@ -26,5 +24,3 @@ Loop
 
 }
 
-
-*/
