@@ -1,0 +1,104 @@
+version: '2'
+
+services:
+#  Nginx:
+#    hostname: 'Nginx'
+#    image: nginx:alpine
+#    network_mode: "host"
+#    container_name: Nginx
+#
+#    volumes:
+#      - /var/nginx/conf:/etc/nginx
+#
+## add configuration file as environment variable 
+#
+###########################################################
+  Apache:
+    hostname: 'Apache'
+    container_name: ApacheServer
+    image: desverreaux/webserver
+    expose:
+      - "1-65535"
+   
+    networks: 
+      InternalProxy:
+        ipv4_address: 10.22.30.1
+
+    volumes:
+          - /data/ApacheStorage:/storage
+          - /var/www/Desverreaux.com:/var/www/Desverreaux.com/
+
+    command: tail -f /etc/hosts
+
+    container_name: ApacheServer
+
+    restart: always
+##########################################################  
+  Portainer:
+    hostname: 'Portainer'
+    image: portainer/portainer
+
+    expose:
+      - "1-65535"
+
+    networks:
+      InternalProxy:
+          ipv4_address: 10.22.50.1
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /data/PortainerDatar:/data
+
+    command: -H unix:///var/run/docker.sock
+   
+##########################################################
+  MySQL:
+    hostname: 'mysql'
+    image: mysql:5.7    
+
+    expose:
+      - "1-65535"
+
+    networks: 
+      InternalProxy:
+        ipv4_address: 10.22.31.1
+
+    volumes:
+      - /data/SqlDatabase:/data
+
+    environment:
+      MYSQL_ROOT_PASSWORD: 9rriyx
+      MYSQL_DATABASE: base
+      MYSQL_USER: phpmyadmin
+      MYSQL_PASSWORD: ne4cbm
+
+    container_name: MySQL
+
+    restart: always
+##########################################################
+  PhpMyAdmin:
+    hostname: 'phpmyadmin'
+    image: phpmyadmin/phpmyadmin
+
+    expose:
+      - "1-65535"
+
+    networks:
+      InternalProxy:
+        ipv4_address: 10.22.31.2
+
+    environment: 
+      PMA_ARBITRARY: 1
+      MYSQL_ROOT_PASSWORD: 9rriyx
+
+    links: 
+      - MySQL:MySQL
+
+    container_name: PhpMyAdmin
+#########################################################
+
+networks:
+  InternalProxy:
+    external:
+      name: InternalProxy
+      
