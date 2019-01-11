@@ -1,10 +1,18 @@
+#===N-O-T-E-S=======
+# this image is designed with the expectation that certain volumes will be mounted during the creation of the container
+# ----- this functionality is not in the dockerfile itself simply because I'm not sure how to do that :/
+
 FROM ubuntu:xenial
 MAINTAINER John Desverreaux version: 0.1
 
+#creates a directory for files that are external to the container, shell scripts used in initialization is a good example
+RUN mkdir /docker
+
+#updates and installs system packages
 RUN apt-get update
 RUN apt-get install npm --yes   
+RUN apt-get install php7.2-fpm --yes
 RUN apt-get install composer --yes
-RUN apt-get install wget --yes
 RUN apt-get install apt-utils --yes
 RUN apt-get install autoconf curl git subversion make unzip wget dialog --yes
 RUN apt-get install nginx --yes
@@ -12,40 +20,51 @@ RUN apt-get install nginx --yes
 
 #RUN echo "Acquire::GzipIndexes \"false\"; Acquire::CompressionTypes::Order:: \"gz\";" >/etc/apt/apt.conf.d/docker-gzip-indexes
 
-#install php modules 
-    RUN apt-get install php-gd --yes 
 
-#installs laravel
+# It needs to be in the right directory to run some composer lines later
     RUN rm -R /var/www/html
     RUN cd /var/www
 
     RUN apt-get install software-properties-common -y
     RUN apt-get install python-software-properties -y
 
-    RUN add-add-repository ppa:ondrej/php -y
+#install php modules 
+    RUN apt-get install php-gd --yes 
+    #RUN add-add-repository ppa:ondrej/php -y
+    # the ascii encoding of the repo in the command above was causing some issues before, the command below "forces" utf8.#
+
+    RUN LC_ALL=C.UTF-8 add-add-repository ppa:ondrej/nginx-mainline -y  
+    
     RUN apt-get update -y
     RUN apt-get install php7.2 -y
-    RUN apt-get install php-pear php7.2-curl php7.2-dev php7.2-gd php7.2-mbstring php7.2-zip php7.2-mysql php7.2-xml libapache2-mod-php -y
+    RUN apt-get install php-pear php7.2-curl php7.2-dev php7.2-gd php7.2-mbstring php7.2-zip php7.2-mysql php7.2-xml -y
     RUN update-alternatives --set php /usr/bin/php7.2
-
-    #RUN composer require laravel/installer
-    # RUN git clone https://github.com/Desverreaux/Desverreaux.com.git
-
 
 #install webapp dependancies 
 
-    curl -sL https://deb.nodesource.com/setup_10.x | bash -
-    RUN apt-get install nodejs -y   
 
-    RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-    RUN php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-    RUN php composer-setup.php
-    RUN php -r "unlink('composer-setup.php');"
+#download the site repo 
+    RUN git clone https://github.com/Desverreaux/Desverreaux.com.git
 
-    cp ./composer.phar / 
+
+#install composer
+    #the contents of the ComposerSetup file can be found at https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
+    COPY ./ComposerSetup.sh /docker/
+    RUN sh /docker/ComposerSetup
+
+    RUN cp ./composer.phar / 
 
     RUN composer install
     RUN composer update
+
+#install nodejs
+    RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+    RUN apt-get install nodejs -y   
+
+#allocate volumes 
+    VOLUME /var/www
+    VOLUME /etc/nginx/conf.d
+    VOLUME /logs
 
 EXPOSE 80
 
