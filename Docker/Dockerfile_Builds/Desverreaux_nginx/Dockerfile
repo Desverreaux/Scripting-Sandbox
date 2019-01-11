@@ -11,10 +11,10 @@ RUN mkdir /docker
 #updates and installs system packages
 RUN apt-get update
 RUN apt-get install npm --yes   
-RUN apt-get install php7.2-fpm --yes
 RUN apt-get install composer --yes
 RUN apt-get install apt-utils --yes
 RUN apt-get install autoconf curl git subversion make unzip wget dialog --yes
+RUN apt-get install nano --yes
 RUN apt-get install nginx --yes
 
 
@@ -33,33 +33,39 @@ RUN apt-get install nginx --yes
     #RUN add-add-repository ppa:ondrej/php -y
     # the ascii encoding of the repo in the command above was causing some issues before, the command below "forces" utf8.#
 
-    RUN LC_ALL=C.UTF-8 add-add-repository ppa:ondrej/nginx-mainline -y  
+    RUN LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php -y  
     
     RUN apt-get update -y
     RUN apt-get install php7.2 -y
     RUN apt-get install php-pear php7.2-curl php7.2-dev php7.2-gd php7.2-mbstring php7.2-zip php7.2-mysql php7.2-xml -y
+    RUN apt-get install php-fpm --yes
     RUN update-alternatives --set php /usr/bin/php7.2
 
 #install webapp dependancies 
 
 
 #download the site repo 
-    RUN git clone https://github.com/Desverreaux/Desverreaux.com.git
+    #RUN git clone https://github.com/Desverreaux/Desverreaux.com.git
 
 
 #install composer
     #the contents of the ComposerSetup file can be found at https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
     COPY ./ComposerSetup.sh /docker/
-    RUN sh /docker/ComposerSetup
+    RUN sh /docker/ComposerSetup.sh
 
-    RUN cp ./composer.phar / 
+    #RUN cp ./composer.phar / 
 
-    RUN composer install
-    RUN composer update
+    #RUN composer install
+    #RUN composer update
 
 #install nodejs
     RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
     RUN apt-get install nodejs -y   
+
+
+#copies external scripts into the container
+COPY [ "./start.sh", "/docker/start.sh" ]
+
 
 #allocate volumes 
     VOLUME /var/www
@@ -68,4 +74,5 @@ RUN apt-get install nginx --yes
 
 EXPOSE 80
 
-CMD ["service", "nginx", "start"] 
+
+CMD ["sh","/docker/start.sh"]
